@@ -16,6 +16,10 @@ def retrieve_email_details():
     user_graph_id = user_entry.get()
     email_graph_id = email_entry.get()
 
+    # remove any whitespaces from beginning and end of user_graph_id and email_graph_id
+    user_graph_id = user_graph_id.strip()
+    email_graph_id = email_graph_id.strip()
+
     # Microsoft Graph API endpoints
     graph_endpoint = 'https://graph.microsoft.com/v1.0'
     user_endpoint = f'{graph_endpoint}/users/{user_graph_id}'
@@ -50,7 +54,20 @@ def retrieve_email_details():
         email_endpoint = f"{user_endpoint}/messages/{email_graph_id}"
         response = requests.get(email_endpoint, headers=headers)
 
-        if response.status_code == 200:
+        if email_graph_id == "":
+            error_label.config(text='Error: No Email Graph ID Was Entered')
+
+            # clear email details from previous entry
+            subject_label.config(text=f"Subject: ")
+            from_label.config(text=f"From:")
+            received_label.config(text=f"Received: ")
+            body_text.delete('1.0', tk.END)
+
+            # clear email graph id entry field
+            email_entry.delete(0, END)
+
+        elif response.status_code == 200:
+            error_label.config(text='')
             email = response.json()
             subject_label.config(text=f"Subject: {email['subject']}")
             from_label.config(text=f"From: {email['from']['emailAddress']['address']}")
@@ -63,6 +80,7 @@ def retrieve_email_details():
 
             # clear email graph id entry field
             email_entry.delete(0, END)
+
         else:
             error_label.config(text='Error: Unable to retrieve email details.')
 
@@ -104,6 +122,7 @@ canvas.create_window((0, 0), window=frame, anchor=tk.NW)
 user_label = tk.Label(frame, text='User Email Address:', font=('Arial', 14))
 user_label.pack()
 user_entry = tk.Entry(frame, font=('Arial', 10), width= 35, justify= 'center')
+print(type(user_entry))
 user_entry.pack()
 
 email_label = tk.Label(frame, text='Email Graph ID:', font=('Arial', 14))
