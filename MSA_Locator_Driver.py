@@ -59,7 +59,9 @@ def retrieve_email_details():
 
             # clear email details from previous entry
             subject_label.config(text=f"Subject: ")
-            from_label.config(text=f"From:")
+            from_label.config(state="normal")
+            from_label.delete(0, END)
+            from_label.config(state="readonly")
             received_label.config(text=f"Received: ")
             body_text.delete('1.0', tk.END)
 
@@ -70,7 +72,9 @@ def retrieve_email_details():
             error_label.config(text='')
             email = response.json()
             subject_label.config(text=f"Subject: {email['subject']}")
-            from_label.config(text=f"From: {email['from']['emailAddress']['address']}")
+            from_label.config(state="normal")
+            from_label.insert(0, f"From: {email['from']['emailAddress']['address']}")
+            from_label.config(state="readonly")
             received_label.config(text=f"Received: {email['receivedDateTime']}")
 
             # Parse and display the email body
@@ -86,7 +90,9 @@ def retrieve_email_details():
 
             # clear email details from previous entry
             subject_label.config(text=f"Subject: ")
-            from_label.config(text=f"From:")
+            from_label.config(state="normal")
+            from_label.delete(0, END)
+            from_label.config(state="readonly")
             received_label.config(text=f"Received: ")
             body_text.delete('1.0', tk.END)
 
@@ -97,7 +103,9 @@ def retrieve_email_details():
 
         # clear email details from previous entry
         subject_label.config(text=f"Subject: ")
-        from_label.config(text=f"From: ")
+        from_label.config(state="normal")
+        from_label.delete(0, END)
+        from_label.config(state="readonly")
         received_label.config(text=f"Received: ")
         body_text.delete('1.0', tk.END)
 
@@ -141,7 +149,7 @@ email_address_label = tk.Label(frame, text='', font=('Arial', 14))
 email_address_label.pack()
 subject_label = tk.Label(frame, text='', font=('Arial', 14))
 subject_label.pack()
-from_label = tk.Label(frame, text='', font=('Arial', 14))
+from_label = tk.Entry(frame, text='', font=('Arial', 14), width= 40, state="readonly", justify="center")
 from_label.pack()
 received_label = tk.Label(frame, text='', font=('Arial', 14))
 received_label.pack()
