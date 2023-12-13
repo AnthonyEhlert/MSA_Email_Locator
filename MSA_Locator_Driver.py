@@ -69,6 +69,17 @@ def retrieve_email_details():
             email_entry.delete(0, END)
 
         elif response.status_code == 200:
+            # clear email details from previous entry
+            subject_label.config(text=f"Subject: ")
+            from_label.config(state="normal")
+            from_label.delete(0, END)
+            from_label.config(state="readonly")
+            received_label.config(text=f"Received: ")
+            body_text.delete('1.0', tk.END)
+
+            # clear email graph id entry field
+            email_entry.delete(0, END)
+
             error_label.config(text='')
             email = response.json()
             subject_label.config(text=f"Subject: {email['subject']}")
